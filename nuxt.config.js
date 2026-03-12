@@ -7,7 +7,13 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
+    '@nuxtjs/color-mode'
   ],
+  colorMode: {
+    classSuffix: '',
+    preference: 'dark', // default value of $colorMode.preference
+    fallback: 'dark',
+  },
   app: {
     head: {
       title: 'SortSmart AI - Waste Management Platform',

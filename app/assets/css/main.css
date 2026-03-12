@@ -3,18 +3,32 @@
 @tailwind utilities;
 
 :root {
-  --primary: #10b981;
-  --primary-dark: #059669;
-  --secondary: #3b82f6;
+  --primary: #2ecc71;
+  --primary-dark: #27ae60;
+  --secondary: #1abc9c;
+  
+  /* Dark Mode Defaults */
   --background: #0f172a;
   --surface: #1e293b;
   --surface-lighter: #334155;
   --text: #f8fafc;
   --text-muted: #94a3b8;
+  --border: rgba(255, 255, 255, 0.05);
+  --glass-bg: rgba(0, 0, 0, 0.2);
+}
+
+.light {
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-lighter: #f1f5f9;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: rgba(0, 0, 0, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.7);
 }
 
 body {
-  @apply bg-slate-950 text-slate-100 font-sans;
+  @apply font-sans transition-colors duration-300;
   background-color: var(--background);
   color: var(--text);
 }
@@ -57,12 +71,10 @@ body {
 }
 
 /* Glassmorphism utility */
-.glass {
-  @apply bg-white/5 backdrop-blur-lg border border-white/10;
-}
-
-.glass-dark {
-  @apply bg-black/20 backdrop-blur-xl border border-white/5;
+.glass, .glass-dark {
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
 }
 
 /* Animations */

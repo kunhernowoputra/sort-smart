@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen flex text-slate-100 bg-slate-950 font-sans">
+  <div class="min-h-screen flex text-[var(--text)] bg-[var(--background)] font-sans">
     <!-- Desktop Sidebar -->
-    <aside class="hidden lg:flex flex-col w-64 border-r border-white/5 bg-slate-900/50 backdrop-blur-xl">
+    <aside class="hidden lg:flex flex-col w-64 border-r border-[var(--border)] glass-dark shadow-2xl">
       <div class="p-6">
         <h1 class="text-xl font-bold bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
           SortSmart AI
@@ -37,7 +37,7 @@
     <!-- Main Content -->
     <div class="flex-1 flex flex-col min-w-0 relative h-screen overflow-hidden">
       <!-- Top Bar -->
-      <header class="h-16 flex items-center justify-between px-6 border-b border-white/5 bg-slate-950/50 backdrop-blur-md z-10">
+      <header class="h-16 flex items-center justify-between px-6 border-b border-[var(--border)] glass backdrop-blur-md z-10">
         <div class="flex lg:hidden items-center space-x-4">
           <button class="p-2 -ml-2 rounded-lg hover:bg-white/5 transition-colors">
             <IconMenu class="w-6 h-6" />
@@ -52,12 +52,13 @@
         </div>
         
         <div class="flex items-center space-x-4">
-          <button class="p-2 rounded-lg border border-white/5 bg-white/5 text-slate-400 hover:text-slate-200 transition-colors relative">
+          <ThemeToggle />
+          <button class="p-2 rounded-lg border border-[var(--border)] bg-[var(--surface-lighter)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors relative">
             <IconBell class="w-5 h-5" />
             <span class="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full"></span>
           </button>
-          <button class="p-2 rounded-lg border border-white/5 bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition-all font-medium text-sm px-4">
-            Upload Data
+          <button class="p-2 rounded-lg border-2 border-emerald-500 bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition-all font-bold text-xs uppercase tracking-widest px-6">
+            Upload
           </button>
         </div>
       </header>

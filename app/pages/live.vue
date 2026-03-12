@@ -1,14 +1,14 @@
 <template>
   <div class="space-y-8">
     <header>
-      <h2 class="text-3xl font-bold text-white mb-2">Live Stream: Line A</h2>
-      <p class="text-slate-400">Real-time Computer Vision waste classification monitoring.</p>
+      <h2 class="text-3xl font-bold text-[var(--text)] mb-2">Live Stream: Line A</h2>
+      <p class="text-[var(--text-muted)]">Real-time Computer Vision waste classification monitoring.</p>
     </header>
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <!-- Camera Feed -->
       <div class="lg:col-span-3 space-y-4">
-        <div class="aspect-video glass-dark rounded-3xl overflow-hidden border border-white/10 relative group">
+        <div class="aspect-video bg-black rounded-3xl overflow-hidden border border-[var(--border)] relative group">
           <!-- Mock Video Feed Placeholder -->
           <div class="absolute inset-0 bg-slate-900 flex items-center justify-center">
             <div class="text-slate-700 font-mono text-sm animate-pulse italic">
@@ -73,33 +73,33 @@
             <button class="px-6 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-sm hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20">
               Calibration Mode
             </button>
-            <button class="px-6 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm hover:bg-white/10 transition-all">
+            <button class="px-6 py-2.5 rounded-xl bg-[var(--surface-lighter)] border border-[var(--border)] text-[var(--text)] font-bold text-sm hover:bg-[var(--border)] transition-all">
               Filter: All Categories
             </button>
           </div>
-          <div class="text-xs text-slate-500 italic">
+          <div class="text-xs text-[var(--text-muted)] italic">
             Connected to Edge Node ID: #SG-0812-JKT
           </div>
         </div>
       </div>
 
       <!-- Detection Log Bar -->
-      <div class="glass-dark rounded-3xl border border-white/10 flex flex-col overflow-hidden">
-        <div class="p-6 border-b border-white/5">
-          <h3 class="font-bold text-white uppercase tracking-widest text-xs">Real-time Detection</h3>
+      <div class="glass-dark rounded-3xl border border-[var(--border)] flex flex-col overflow-hidden">
+        <div class="p-6 border-b border-[var(--border)]">
+          <h3 class="font-bold text-[var(--text)] uppercase tracking-widest text-xs">Real-time Detection</h3>
         </div>
         <div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-          <div v-for="n in 12" :key="n" class="p-3 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-emerald-500/30 transition-all animate-in fade-in slide-in-from-right-4">
+          <div v-for="n in 12" :key="n" class="p-3 rounded-2xl bg-[var(--surface-lighter)] border border-[var(--border)] flex items-center justify-between group hover:border-emerald-500/30 transition-all animate-in fade-in slide-in-from-right-4">
             <div class="flex items-center space-x-3">
               <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold text-[10px]">
                 {{ Math.random() > 0.5 ? 'PET' : 'HDPE' }}
               </div>
               <div>
-                <p class="text-xs font-bold text-slate-200">Waste Item #{{ 400 + n }}</p>
-                <p class="text-[10px] text-slate-500">Confidence: {{ (90 + Math.random() * 9).toFixed(1) }}%</p>
+                <p class="text-xs font-bold text-[var(--text)]">Waste Item #{{ 400 + n }}</p>
+                <p class="text-[10px] text-[var(--text-muted)]">Confidence: {{ (90 + Math.random() * 9).toFixed(1) }}%</p>
               </div>
             </div>
-            <p class="text-[10px] font-mono text-slate-600">14:23:4{{ n }}</p>
+            <p class="text-[10px] font-mono text-[var(--text-muted)]">14:23:4{{ n }}</p>
           </div>
         </div>
         <div class="p-4 bg-white/5 border-t border-white/5">

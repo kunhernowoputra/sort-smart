@@ -3,15 +3,15 @@
     <!-- Hero Section -->
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h2 class="text-3xl font-bold text-white mb-2">Dashboard Overview</h2>
-        <p class="text-slate-400">Monitoring waste processing performance across all lines.</p>
+        <h2 class="text-3xl font-bold text-[var(--text)] mb-2">Dashboard Overview</h2>
+        <p class="text-[var(--text-muted)]">Monitoring waste processing performance across all lines.</p>
       </div>
       <div class="flex items-center space-x-3 text-sm">
         <div class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center">
           <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
           System Online
         </div>
-        <div class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300">
+        <div class="px-3 py-1.5 rounded-full bg-[var(--surface-lighter)] border border-[var(--border)] text-[var(--text)]">
           Last updated: Just now
         </div>
       </div>
@@ -59,8 +59,8 @@
       <!-- Main Chart -->
       <div class="lg:col-span-2 glass-dark rounded-3xl p-8 border border-white/10">
         <div class="flex items-center justify-between mb-8">
-          <h3 class="text-xl font-bold">Material Composition</h3>
-          <select class="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm outline-none focus:border-emerald-500/50">
+          <h3 class="text-xl font-bold text-[var(--text)]">Material Composition</h3>
+          <select class="bg-[var(--surface-lighter)] border border-[var(--border)] text-[var(--text)] rounded-lg px-3 py-1.5 text-sm outline-none focus:border-emerald-500/50">
             <option>Last 24 Hours</option>
             <option>Last 7 Days</option>
             <option>Monthly</option>
@@ -83,8 +83,8 @@
       </div>
 
       <!-- Recent Alerts/Log -->
-      <div class="glass-dark rounded-3xl p-8 border border-white/10">
-        <h3 class="text-xl font-bold mb-6">Live Events</h3>
+      <div class="glass-dark rounded-3xl p-8 border border-[var(--border)]">
+        <h3 class="text-xl font-bold mb-6 text-[var(--text)]">Live Events</h3>
         <div class="space-y-6">
           <div v-for="n in 5" :key="n" class="flex space-x-4 group cursor-pointer">
             <div class="w-1 bg-emerald-500/40 group-hover:bg-emerald-400 rounded-full transition-colors"></div>

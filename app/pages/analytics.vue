@@ -2,11 +2,11 @@
   <div class="space-y-8 pb-12">
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h2 class="text-3xl font-bold text-white mb-2">Detailed Analytics</h2>
-        <p class="text-slate-400">Deep dive into material recovery rates and efficiency.</p>
+        <h2 class="text-3xl font-bold text-[var(--text)] mb-2">Detailed Analytics</h2>
+        <p class="text-[var(--text-muted)]">Deep dive into material recovery rates and efficiency.</p>
       </div>
       <div class="flex items-center space-x-3">
-        <button class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-sm font-medium hover:bg-white/10 transition-all flex items-center">
+        <button class="px-4 py-2 rounded-xl bg-[var(--surface-lighter)] border border-[var(--border)] text-[var(--text)] text-sm font-medium hover:bg-[var(--border)] transition-all flex items-center">
           <IconDownload class="w-4 h-4 mr-2" />
           Export CSV
         </button>
@@ -25,10 +25,10 @@
         <div class="space-y-6">
           <div v-for="cat in categories" :key="cat.name" class="space-y-2">
             <div class="flex justify-between text-sm">
-              <span class="text-slate-300 font-medium">{{ cat.name }}</span>
-              <span class="text-white font-mono font-bold">{{ cat.rate }}%</span>
+              <span class="text-[var(--text-muted)] font-medium">{{ cat.name }}</span>
+              <span class="text-[var(--text)] font-mono font-bold">{{ cat.rate }}%</span>
             </div>
-            <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+            <div class="h-2 w-full bg-[var(--surface-lighter)] rounded-full overflow-hidden">
               <div 
                 class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000"
                 :style="{ width: cat.rate + '%' }"
@@ -85,11 +85,11 @@
     </div>
 
     <!-- Data Table Preview -->
-    <div class="glass-dark rounded-3xl border border-white/10 overflow-hidden">
-      <div class="p-8 border-b border-white/5 flex items-center justify-between">
-        <h3 class="text-xl font-bold">Recent Classification Data</h3>
+    <div class="glass-dark rounded-3xl border border-[var(--border)] overflow-hidden">
+      <div class="p-8 border-b border-[var(--border)] flex items-center justify-between">
+        <h3 class="text-xl font-bold text-[var(--text)]">Recent Classification Data</h3>
         <div class="flex space-x-2">
-          <div class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-400 flex items-center">
+          <div class="px-4 py-2 rounded-xl bg-[var(--surface-lighter)] border border-[var(--border)] text-xs text-[var(--text-muted)] flex items-center">
             Filter: All Lines
           </div>
         </div>
@@ -97,7 +97,7 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left">
           <thead>
-            <tr class="text-[10px] text-slate-500 uppercase font-black tracking-widest border-b border-white/5">
+            <tr class="text-[10px] text-[var(--text-muted)] uppercase font-black tracking-widest border-b border-[var(--border)]">
               <th class="px-8 py-4">Item ID</th>
               <th class="px-8 py-4">Category</th>
               <th class="px-8 py-4">Confidence</th>
@@ -106,8 +106,8 @@
               <th class="px-8 py-4 text-right">Action</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-white/5">
-            <tr v-for="n in 5" :key="n" class="hover:bg-white/5 transition-colors group">
+          <tbody class="divide-y divide-[var(--border)]">
+            <tr v-for="n in 5" :key="n" class="hover:bg-[var(--surface-lighter)] transition-colors group">
               <td class="px-8 py-4 font-mono text-xs text-emerald-400">#SS-TRX-{{ 1000 + n }}</td>
               <td class="px-8 py-4">
                 <span class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase">

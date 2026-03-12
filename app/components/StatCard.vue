@@ -1,5 +1,5 @@
 <template>
-  <div class="glass-dark rounded-3xl p-6 border border-white/10 hover:border-emerald-500/30 transition-all duration-500 group">
+  <div class="glass-dark rounded-3xl p-6 border border-[var(--border)] hover:border-emerald-500/30 transition-all duration-500 group">
     <div class="flex items-center justify-between mb-4">
       <div :class="[
         'w-12 h-12 rounded-2xl flex items-center justify-center transition-colors',
@@ -18,12 +18,12 @@
     </div>
     
     <div>
-      <p class="text-slate-500 text-sm font-medium mb-1">{{ title }}</p>
+      <p class="text-[var(--text-muted)] text-sm font-medium mb-1">{{ title }}</p>
       <div class="flex items-baseline space-x-2">
-        <h4 class="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight">
+        <h4 class="text-2xl font-bold text-[var(--text)] group-hover:text-emerald-400 transition-colors uppercase tracking-tight">
           {{ value }}
         </h4>
-        <span v-if="unit" class="text-xs text-slate-600 font-bold uppercase">{{ unit }}</span>
+        <span v-if="unit" class="text-xs text-[var(--text-muted)] font-bold uppercase">{{ unit }}</span>
       </div>
     </div>
   </div>
