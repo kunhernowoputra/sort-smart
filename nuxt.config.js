@@ -7,18 +7,12 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
-    '@nuxtjs/color-mode',
     '@nuxt/fonts'
   ],
   fonts: {
     families: [
       { name: 'Inter', provider: 'google', weights: [400, 500, 700, 800, 900] }
     ]
-  },
-  colorMode: {
-    classSuffix: '',
-    preference: 'dark', // default value of $colorMode.preference
-    fallback: 'dark',
   },
   app: {
     head: {

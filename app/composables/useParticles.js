@@ -1,5 +1,4 @@
-// app/composables/useParticles.js
-export const useParticles = (canvasRef) => {
+export function useParticles(canvasRef) {
   onMounted(() => {
     const canvas = canvasRef.value
     if (!canvas) return
@@ -13,8 +12,8 @@ export const useParticles = (canvasRef) => {
     window.addEventListener('resize', resize)
 
     const particles = Array.from({ length: 80 }, () => ({
-      x: Math.random() * (canvas.width || window.innerWidth),
-      y: Math.random() * (canvas.height || window.innerHeight),
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
       size: [1, 2, 3][Math.floor(Math.random() * 3)],
       opacity: 0.2 + Math.random() * 0.5,
       vx: (Math.random() - 0.5) * 0.3,
@@ -25,9 +24,7 @@ export const useParticles = (canvasRef) => {
     const handleMouseMove = (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 20
       const y = (e.clientY / window.innerHeight - 0.5) * 20
-      if (canvas) {
-        canvas.style.transform = `translate(${x}px, ${y}px)`
-      }
+      canvas.style.transform = `translate(${x}px, ${y}px)`
     }
     document.addEventListener('mousemove', handleMouseMove)
 

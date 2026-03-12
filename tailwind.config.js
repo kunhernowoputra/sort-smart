@@ -38,17 +38,27 @@ export default {
           from: { width: '0' },
           to:   { width: '100%' },
         },
+        blink: {
+          '0%, 100%': { opacity: '1' },
+          '50%':      { opacity: '0' },
+        },
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },
           '20%, 60%': { transform: 'translateX(-8px)' },
           '40%, 80%': { transform: 'translateX(8px)' },
+        },
+        shimmer: {
+          from: { left: '-100%' },
+          to:   { left: '100%' },
         }
       },
       animation: {
         'card-entrance': 'cardEntrance 0.6s cubic-bezier(0.16,1,0.3,1) forwards',
         'logo-pulse':    'logoPulse 2s ease-in-out infinite',
         'typewriter':    'typewriter 2.5s steps(40) forwards',
+        'blink':         'blink 1s step-end infinite',
         'shake':         'shake 0.4s ease',
+        'shimmer':       'shimmer 0.5s ease forwards',
       }
     },
   },
