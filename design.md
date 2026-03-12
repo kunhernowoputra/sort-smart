@@ -1,5 +1,5 @@
 # SortSmart AI — Login Page Design Specification
-> Version 2.1 | Tailwind v3 + Nuxt Fonts | Atlas Design System
+> Version 2.2 | Tailwind v3 + Nuxt Fonts + Dark/Light Mode | Atlas Design System
 
 ---
 
@@ -10,7 +10,9 @@
 | Project | SortSmart AI |
 | Page | Login |
 | Style | Dark Luxury Eco-Tech |
-| Stack | Nuxt 3 + Tailwind v3 (`@nuxtjs/tailwindcss ^6.14.0`) + Nuxt Fonts |
+| Stack | Nuxt 4
+| Default Mode | Dark Mode |
+| Toggle | Manual button di UI |
 | Target Score | 9.5/10 |
 
 ---
@@ -21,7 +23,7 @@
 npx nuxi module add fonts
 ```
 
-Lalu di `nuxt.config.ts`:
+`nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
@@ -37,26 +39,23 @@ export default defineNuxtConfig({
 })
 ```
 
-Di `tailwind.config.ts`, extend fontFamily:
+---
+
+## 📦 Step 2 — Tailwind Dark Mode Config
+
+`tailwind.config.ts`:
 
 ```ts
 import type { Config } from 'tailwindcss'
 
 export default {
+  // WAJIB: pakai 'class' agar bisa toggle manual
+  darkMode: 'class',
   content: [],
   theme: {
     extend: {
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui'],
-      },
-      colors: {
-        eco: {
-          base:     '#050f0a',
-          accent:   '#00ff88',
-          mid:      '#00c96b',
-          text:     '#f0faf4',
-          muted:    '#6b8f7a',
-        }
       },
       keyframes: {
         cardEntrance: {
@@ -90,35 +89,121 @@ export default {
 
 ---
 
-## 🎨 Color Reference (Tailwind Classes)
+## 🎨 Color System — Dark vs Light
 
-| Elemen | Class |
-|---|---|
-| Background | `bg-[#050f0a]` |
-| Accent green | `text-[#00ff88]` |
-| Card bg | `bg-white/[0.04]` |
-| Card border | `border-[rgba(0,255,136,0.12)]` |
-| Text primary | `text-[#f0faf4]` |
-| Text muted | `text-[#6b8f7a]` |
-| Input bg | `bg-white/[0.05]` |
-| Input border | `border-white/[0.08]` |
+| Elemen | Dark Mode | Light Mode |
+|---|---|---|
+| Background | `bg-[#050f0a]` | `bg-[#f0faf4]` |
+| Left panel | `bg-[#050f0a]` | `bg-[#0a2e1a]` (tetap gelap) |
+| Card bg | `bg-white/[0.04]` | `bg-white` |
+| Card border | `border-[rgba(0,255,136,0.12)]` | `border-[rgba(0,180,80,0.2)]` |
+| Text primary | `text-[#f0faf4]` | `text-[#0a1a0f]` |
+| Text muted | `text-[#6b8f7a]` | `text-[#4a7a5a]` |
+| Input bg | `bg-white/[0.05]` | `bg-white` |
+| Input border | `border-white/[0.08]` | `border-gray-200` |
+| Input text | `text-[#f0faf4]` | `text-[#0a1a0f]` |
+| Accent | `text-[#00ff88]` | `text-[#00a855]` |
+| Button | `from-[#00c96b] to-[#00ff88]` | `from-[#00a855] to-[#00c96b]` |
+| Button text | `text-[#050f0a]` | `text-white` |
+| Shadow | `shadow-[0_32px_64px_rgba(0,0,0,0.4)]` | `shadow-[0_32px_64px_rgba(0,0,0,0.08)]` |
+
+> **Catatan:** Left panel **selalu gelap** di kedua mode karena particle background & branding lebih bagus di atas warna gelap.
 
 ---
 
-## 📐 Layout
+## 🌙 Composable useColorMode
+
+Buat `composables/useColorMode.ts`:
+
+```ts
+export function useColorMode() {
+  // Default: dark
+  const isDark = ref(true)
+
+  // Sync ke <html> class untuk Tailwind darkMode: 'class'
+  const apply = () => {
+    if (isDark.value) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    // Simpan preferensi ke localStorage
+    localStorage.setItem('color-mode', isDark.value ? 'dark' : 'light')
+  }
+
+  const toggle = () => {
+    isDark.value = !isDark.value
+    apply()
+  }
+
+  onMounted(() => {
+    // Baca dari localStorage, default dark jika belum ada
+    const saved = localStorage.getItem('color-mode')
+    isDark.value = saved ? saved === 'dark' : true
+    apply()
+  })
+
+  return { isDark, toggle }
+}
+```
+
+---
+
+## 🔘 Toggle Button Component
+
+Taruh di pojok kanan atas halaman login:
+
+```vue
+<button @click="toggle"
+        class="absolute top-5 right-5 z-50
+               w-10 h-10 rounded-xl flex items-center justify-center
+               transition-all duration-300
+               dark:bg-white/10 dark:hover:bg-white/20 dark:text-[#00ff88]
+               bg-black/5 hover:bg-black/10 text-[#00a855]">
+
+  <!-- Sun icon (tampil saat dark mode aktif) -->
+  <svg v-if="isDark" xmlns="http://www.w3.org/2000/svg"
+       class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707
+             M6.343 17.657l-.707.707m12.728 0l-.707-.707
+             M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+  </svg>
+
+  <!-- Moon icon (tampil saat light mode aktif) -->
+  <svg v-else xmlns="http://www.w3.org/2000/svg"
+       class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M20.354 15.354A9 9 0 018.646 3.646
+             9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</button>
+```
+
+---
+
+## 📐 Layout Wrapper
 
 ```vue
 <template>
-  <div class="min-h-screen bg-[#050f0a] flex font-sans">
+  <div class="min-h-screen font-sans relative transition-colors duration-300
+              dark:bg-[#050f0a] bg-[#f0faf4] flex">
 
-    <!-- Left Panel (hidden on mobile) -->
-    <div class="hidden md:flex w-1/2 relative flex-col justify-between p-12 overflow-hidden">
+    <!-- Toggle Button -->
+    <button @click="toggle" class="absolute top-5 right-5 z-50 ...">
+      ...
+    </button>
+
+    <!-- Left Panel (selalu dark) -->
+    <div class="hidden md:flex w-1/2 bg-[#050f0a] relative
+                flex-col justify-between p-12 overflow-hidden">
       <canvas ref="canvasRef" class="absolute inset-0 w-full h-full pointer-events-none" />
-      <!-- branding content -->
+      <!-- branding -->
     </div>
 
     <!-- Right Panel -->
-    <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12">
+    <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12
+                transition-colors duration-300">
       <!-- form card -->
     </div>
 
@@ -128,244 +213,96 @@ export default {
 
 ---
 
-## 🖼️ Left Panel
+## 📋 Form Card (Dark + Light)
 
 ```vue
-<!-- Logo -->
-<div class="flex items-center gap-3 relative z-10">
-  <div class="w-10 h-10 rounded-xl bg-[#00ff88]/10 border border-[#00ff88]/20
-              flex items-center justify-center animate-logo-pulse">
-    <!-- SVG leaf icon -->
-  </div>
-  <span class="text-[#f0faf4] font-bold text-lg">SortSmart AI</span>
-</div>
+<div class="w-full max-w-md p-8 rounded-3xl animate-card-entrance
+            transition-all duration-300
 
-<!-- Headline -->
-<div class="relative z-10 space-y-4">
-  <h1 class="text-5xl font-extrabold leading-tight">
-    <span class="text-[#f0faf4]">Future of</span><br>
-    <span class="bg-gradient-to-r from-[#00c96b] to-[#00ff88] bg-clip-text text-transparent">
-      Waste Sorting.
-    </span>
-  </h1>
+            dark:bg-white/[0.04] dark:backdrop-blur-2xl
+            dark:border dark:border-[rgba(0,255,136,0.12)]
+            dark:shadow-[0_32px_64px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.06)]
 
-  <!-- Typewriter tagline -->
-  <p class="text-[#6b8f7a] text-base overflow-hidden whitespace-nowrap
-            animate-typewriter border-r-2 border-[#00ff88] w-fit">
-    Platform Sortasi Sampah Masa Depan
-  </p>
+            bg-white border border-[rgba(0,180,80,0.15)]
+            shadow-[0_32px_64px_rgba(0,0,0,0.08)]">
 
-  <!-- Feature Pills -->
-  <div class="flex gap-2 pt-2 flex-wrap">
-    <span v-for="pill in ['♻️ AI Sorting', '📊 Real-time', '🌿 Eco Impact']" :key="pill"
-          class="px-3 py-1.5 rounded-full text-xs font-medium
-                 bg-white/5 border border-white/10 text-[#f0faf4]">
-      {{ pill }}
-    </span>
-  </div>
-</div>
-
-<!-- Social Proof -->
-<div class="flex items-center gap-3 relative z-10">
-  <div class="flex -space-x-2">
-    <img v-for="i in 4" :key="i"
-         class="w-8 h-8 rounded-full border-2 border-[#050f0a]"
-         :src="`https://i.pravatar.cc/32?img=${i}`" />
-  </div>
-  <div>
-    <p class="text-[#f0faf4] text-sm font-semibold">50+ Cities Trust Us</p>
-    <p class="text-[#6b8f7a] text-xs">Building sustainable ecosystems.</p>
-  </div>
-</div>
-```
-
----
-
-## 📋 Form Card
-
-```vue
-<div class="w-full max-w-md p-8 rounded-3xl
-            bg-white/[0.04] backdrop-blur-2xl
-            border border-[rgba(0,255,136,0.12)]
-            shadow-[0_32px_64px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.06)]
-            animate-card-entrance">
-
-  <!-- Logo pulse -->
-  <div class="flex justify-center mb-6">
-    <div class="w-14 h-14 rounded-2xl bg-[#00ff88]/10 border border-[#00ff88]/20
-                flex items-center justify-center animate-logo-pulse">
-      <!-- SVG icon -->
-    </div>
-  </div>
-
-  <!-- Title gradient -->
+  <!-- Title -->
   <h2 class="text-2xl font-bold text-center mb-1
-             bg-gradient-to-r from-white to-[#00ff88] bg-clip-text text-transparent">
+             dark:bg-gradient-to-r dark:from-white dark:to-[#00ff88]
+             bg-gradient-to-r from-[#0a1a0f] to-[#00a855]
+             bg-clip-text text-transparent">
     Selamat Datang Kembali
   </h2>
 
   <!-- Subtitle -->
-  <p class="text-[#6b8f7a] text-sm text-center mb-8">
+  <p class="text-sm text-center mb-8
+            dark:text-[#6b8f7a] text-[#4a7a5a]">
     Masuk ke dashboard pengelolaan sampah Anda
   </p>
 
-  <!-- Email Field -->
-  <div class="mb-4">
-    <label class="block text-[#f0faf4] text-sm font-medium mb-1.5">Email Address</label>
-    <div class="relative">
-      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#6b8f7a] pointer-events-none">
-        <!-- email icon -->
-      </span>
-      <input type="email"
-             placeholder="admin@sortsmart.ai"
-             class="w-full pl-10 pr-4 py-3 rounded-xl text-sm
-                    bg-white/[0.05] border border-white/[0.08] text-[#f0faf4]
-                    placeholder:text-[#6b8f7a]
-                    focus:outline-none focus:border-[#00ff88]/50
-                    focus:ring-2 focus:ring-[#00ff88]/10
-                    transition-all duration-300" />
-    </div>
-  </div>
+  <!-- Input -->
+  <input type="email"
+         class="w-full pl-10 pr-4 py-3 rounded-xl text-sm
+                transition-all duration-300
 
-  <!-- Password Field -->
-  <div class="mb-5">
-    <label class="block text-[#f0faf4] text-sm font-medium mb-1.5">Password</label>
-    <div class="relative">
-      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#6b8f7a] pointer-events-none">
-        <!-- lock icon -->
-      </span>
-      <input :type="showPassword ? 'text' : 'password'"
-             class="w-full pl-10 pr-10 py-3 rounded-xl text-sm
-                    bg-white/[0.05] border border-white/[0.08] text-[#f0faf4]
-                    placeholder:text-[#6b8f7a]
-                    focus:outline-none focus:border-[#00ff88]/50
-                    focus:ring-2 focus:ring-[#00ff88]/10
-                    transition-all duration-300" />
-      <button @click="showPassword = !showPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2
-                     text-[#6b8f7a] hover:text-[#00ff88] transition-colors duration-200">
-        <!-- eye / eye-off icon -->
-      </button>
-    </div>
-  </div>
+                dark:bg-white/[0.05] dark:border-white/[0.08]
+                dark:text-[#f0faf4] dark:placeholder:text-[#6b8f7a]
+                dark:focus:border-[#00ff88]/50 dark:focus:ring-[#00ff88]/10
 
-  <!-- Remember + Forgot -->
-  <div class="flex items-center justify-between mb-6">
-    <label class="flex items-center gap-2 text-sm text-[#6b8f7a] cursor-pointer select-none">
-      <input type="checkbox"
-             class="rounded border-white/10 bg-white/5 accent-[#00ff88]" />
-      Ingat saya
-    </label>
-    <a href="#" class="text-sm text-[#00ff88] font-medium hover:underline">
-      Lupa Password?
-    </a>
-  </div>
+                bg-white border-gray-200
+                text-[#0a1a0f] placeholder:text-[#4a7a5a]
+                focus:border-[#00a855]/50 focus:ring-[#00a855]/10
 
-  <!-- CTA Button -->
-  <button @click="handleLogin" :disabled="loading"
-          class="w-full py-3.5 rounded-xl font-bold text-sm tracking-widest
-                 text-[#050f0a] relative overflow-hidden
-                 bg-gradient-to-r from-[#00c96b] via-[#00ff88] to-[#00c96b]
-                 bg-[length:200%_auto]
-                 hover:bg-right-center hover:scale-[1.01]
-                 active:scale-[0.99]
-                 transition-all duration-300
-                 disabled:opacity-60 disabled:cursor-not-allowed">
-    <span v-if="!loading">MASUK SEKARANG</span>
-    <span v-else class="flex items-center justify-center gap-2">
-      <svg class="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-      </svg>
-      Memproses...
-    </span>
+                border focus:outline-none focus:ring-2" />
+
+  <!-- Button -->
+  <button class="w-full py-3.5 rounded-xl font-bold text-sm tracking-widest
+                 relative overflow-hidden transition-all duration-300
+                 hover:scale-[1.01] active:scale-[0.99]
+                 disabled:opacity-60 disabled:cursor-not-allowed
+
+                 dark:bg-gradient-to-r dark:from-[#00c96b] dark:via-[#00ff88] dark:to-[#00c96b]
+                 dark:text-[#050f0a]
+
+                 bg-gradient-to-r from-[#00a855] via-[#00c96b] to-[#00a855]
+                 text-white
+
+                 bg-[length:200%_auto] hover:bg-right-center">
+    MASUK SEKARANG
   </button>
 
-  <!-- Footer -->
-  <p class="text-center text-sm text-[#6b8f7a] mt-6">
-    Belum punya akun?
-    <span class="text-[#f0faf4] font-semibold cursor-pointer hover:text-[#00ff88] transition-colors">
-      Hubungi Admin
-    </span>
-  </p>
+  <!-- Forgot Password link -->
+  <a href="#" class="text-sm font-medium hover:underline
+                     dark:text-[#00ff88] text-[#00a855]">
+    Lupa Password?
+  </a>
 
 </div>
 ```
 
 ---
 
-## ✨ Script Setup
+## ✨ Script Setup Lengkap
 
 ```vue
 <script setup lang="ts">
+import { useColorMode } from '~/composables/useColorMode'
 import { useParticles } from '~/composables/useParticles'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const showPassword = ref(false)
 const loading = ref(false)
 
+const { isDark, toggle } = useColorMode()
+
 useParticles(canvasRef)
 
 async function handleLogin() {
   loading.value = true
-  // logic login
   await new Promise(r => setTimeout(r, 1500))
   loading.value = false
 }
 </script>
-```
-
----
-
-## 🎯 Composable Particle System
-
-Buat file `composables/useParticles.ts`:
-
-```ts
-export function useParticles(canvasRef: Ref<HTMLCanvasElement | null>) {
-  onMounted(() => {
-    const canvas = canvasRef.value
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')!
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth
-      canvas.height = canvas.offsetHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    const particles = Array.from({ length: 80 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      size: [1, 2, 3][Math.floor(Math.random() * 3)],
-      opacity: 0.2 + Math.random() * 0.5,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-    }))
-
-    // Mouse parallax
-    document.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 20
-      const y = (e.clientY / window.innerHeight - 0.5) * 20
-      canvas.style.transform = `translate(${x}px, ${y}px)`
-    })
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      particles.forEach(p => {
-        p.x = (p.x + p.vx + canvas.width) % canvas.width
-        p.y = (p.y + p.vy + canvas.height) % canvas.height
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(0, 255, 136, ${p.opacity})`
-        ctx.fill()
-      })
-      requestAnimationFrame(animate)
-    }
-    animate()
-  })
-}
 ```
 
 ---
@@ -376,6 +313,7 @@ export function useParticles(canvasRef: Ref<HTMLCanvasElement | null>) {
 pages/
   login.vue
 composables/
+  useColorMode.ts
   useParticles.ts
 tailwind.config.ts
 nuxt.config.ts
@@ -385,16 +323,21 @@ nuxt.config.ts
 
 ## ⚡ Micro-interactions Summary
 
-| Element | Class / Behavior |
-|---|---|
-| Input focus | `focus:border-[#00ff88]/50 focus:ring-2 focus:ring-[#00ff88]/10` |
-| Button hover | `hover:scale-[1.01] hover:bg-right-center` |
-| Button active | `active:scale-[0.99]` |
-| Card load | `animate-card-entrance` |
-| Logo | `animate-logo-pulse` |
-| Tagline | `animate-typewriter` |
-| Error shake | add `animate-shake` class via JS on validation fail |
-| Password toggle | `hover:text-[#00ff88] transition-colors` |
+| Element | Dark | Light |
+|---|---|---|
+| Input focus ring | `dark:focus:ring-[#00ff88]/10` | `focus:ring-[#00a855]/10` |
+| Button gradient | green electric | green natural |
+| Card bg | glassmorphism | solid white |
+| Toggle icon | ☀️ Sun | 🌙 Moon |
+| Transition | `transition-colors duration-300` di semua elemen |
+
+---
+
+## 🏆 Quality Bar
+
+> *"Must look like a $10,000 design agency made it."*
+> Dark mode: luxury eco-tech. Light mode: clean & professional.
+> Setiap elemen harus enak di kedua mode.
 
 ---
 
