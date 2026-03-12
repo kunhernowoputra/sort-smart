@@ -11,10 +11,45 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+      },
       colors: {
+        eco: {
+          base:     '#050f0a',
+          accent:   '#00ff88',
+          mid:      '#00c96b',
+          text:     '#f0faf4',
+          muted:    '#6b8f7a',
+        },
         primary: 'var(--primary)',
         'primary-dark': 'var(--primary-dark)',
       },
+      keyframes: {
+        cardEntrance: {
+          from: { opacity: '0', transform: 'translateY(24px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
+        logoPulse: {
+          '0%, 100%': { filter: 'drop-shadow(0 0 8px rgba(0,255,136,0.4))', transform: 'scale(1)' },
+          '50%':      { filter: 'drop-shadow(0 0 20px rgba(0,255,136,0.8))', transform: 'scale(1.05)' },
+        },
+        typewriter: {
+          from: { width: '0' },
+          to:   { width: '100%' },
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '20%, 60%': { transform: 'translateX(-8px)' },
+          '40%, 80%': { transform: 'translateX(8px)' },
+        }
+      },
+      animation: {
+        'card-entrance': 'cardEntrance 0.6s cubic-bezier(0.16,1,0.3,1) forwards',
+        'logo-pulse':    'logoPulse 2s ease-in-out infinite',
+        'typewriter':    'typewriter 2.5s steps(40) forwards',
+        'shake':         'shake 0.4s ease',
+      }
     },
   },
   plugins: [],
