@@ -1,0 +1,28 @@
+{
+  "name": "sort-smart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@pinia/nuxt": "^0.11.3",
+    "@prisma/client": "^7.5.0",
+    "@prisma/nuxt": "^0.3.0",
+    "nuxt": "^4.3.1",
+    "pinia": "^3.0.4"
+  },
+  "devDependencies": {
+    "prisma": "^7.5.0"
+  }
+}
