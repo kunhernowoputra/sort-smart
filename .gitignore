@@ -1,5 +1,22 @@
+# Nuxt dev/build outputs
+.output
+.nuxt
+dist
 node_modules
-# Keep environment variables out of version control
-.env
+*.log
 
-/app/generated/prisma
+# OS Metadata
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+*.local
+
+# Database
+dev.db
+dev.db-journal
+
+# IDEs
+.vscode
+.idea
